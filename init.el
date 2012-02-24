@@ -131,6 +131,7 @@
 
 ; mark always active for selecting
 (setq transient-mark-mode t)
+(delete-selection-mode 1)
 
 ; prevent dabbrev from replacing case
 (setq dabbrev-case-replace nil)
