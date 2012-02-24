@@ -107,7 +107,7 @@
 (add-hook 'ibuffer-mode-hook
   (lambda ()
     (ibuffer-switch-to-saved-filter-groups "default")))
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "<C-tab>") 'ibuffer)
 
 ;    yes/no turns to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
