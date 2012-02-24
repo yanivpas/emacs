@@ -54,6 +54,14 @@
 (recentf-mode 1)
 (run-with-idle-timer (* 5 60) t 'recentf-save-list)
 
+; zap-up-to-char
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR.
+  
+  \(fn arg char)"
+  'interactive)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
 ; autosave settings
 (setq auto-save-list-file-prefix nil)
 (setq make-backup-files nil)
