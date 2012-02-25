@@ -267,6 +267,8 @@
 (global-set-key [(f7)] 'magit-status)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
 (global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-x t") 'toggle-truncate-lines)
+
 
 ; Customizations beyond this configuration - separate to a different file
 (setq custom-file "~/.emacs-custom.el")
