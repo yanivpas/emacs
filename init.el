@@ -238,6 +238,8 @@
 ; ------- Utilities -----
 ; browse-kill-ring
 (autoload 'browse-kill-ring (in-utils-d "browse-kill-ring.el") nil t)
+(require 'browse-kill-ring)
+(browse-kill-ring-default-keybindings)
 
 ; rainbow-mode
 (autoload 'rainbow-mode (in-utils-d "rainbow-mode.el") nil t)
