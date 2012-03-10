@@ -121,8 +121,11 @@
 
 ; Terminal settings
 ; properly handle SHIFT+up for selection
-(if in-terminal
-    (define-key input-decode-map "\e[1;2A" [S-up]))
+(defadvice terminal-init-xterm (around map-keys-properly activate)
+  (define-key input-decode-map "\e[1;2A" [S-up])
+  ad-do-it
+)
+
 
 ; --------  Basic editing facilities ---------
 
@@ -154,11 +157,18 @@
   (setq py-install-directory python-mode-dir)
   (autoload 'python-mode "python-mode.el" nil t))
 
+; Markdown
+(autoload 'markdown-mode "markdown-mode.el" nil t)
+(add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+
 ; ------- Modes ---------
 ; ido
 (ido-mode)
 (require 'ido-recentf-open)
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+; iedit
+(require 'iedit)
 
 ; anything
 (add-to-list 'load-path (in-modes-d "anything"))
@@ -262,11 +272,15 @@
     (turn-on-pbcopy)
     ))
 
+; pomodoro - time management technique
+(autoload 'pomodoro "pomodoro.el" nil t)
+
 ; ------- Keyboard shortcuts -----
 ; F keys
 (eval-after-load "c-mode" '(define-key c-mode-map [(f6)] 'ff-find-other-file))
 (eval-after-load "cc-mode" '(define-key c-mode-map [(f6)] 'ff-find-other-file))
 (global-set-key [(f7)] 'magit-status)
+(global-set-key [(f9)] 'compile)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
 (global-set-key (kbd "C-z") 'undo)
 (global-set-key (kbd "C-x t") 'toggle-truncate-lines)
