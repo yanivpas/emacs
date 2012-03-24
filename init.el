@@ -138,6 +138,7 @@
 (global-auto-revert-mode t)
 
 ; mark always active for selecting
+(require 'delsel)
 (setq transient-mark-mode t)
 (delete-selection-mode 1)
 
