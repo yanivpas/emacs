@@ -72,10 +72,10 @@
 (global-set-key [(end)]                  'end-of-line)
 (global-set-key [(home)]                 'beginning-of-line)
 ;    window moving
-(global-set-key (kbd "C-x <up>") 'windmove-up)
-(global-set-key (kbd "C-x <down>") 'windmove-down)
-(global-set-key (kbd "C-x <right>") 'windmove-right)
-(global-set-key (kbd "C-x <left>") 'windmove-left)
+(global-set-key (kbd "<M-up>") 'windmove-up)
+(global-set-key (kbd "<M-down>") 'windmove-down)
+(global-set-key (kbd "<M-right>") 'windmove-right)
+(global-set-key (kbd "<M-left>") 'windmove-left)
 ;    ibuffer key binding
 (setq ibuffer-saved-filter-groups
   (quote (("default"
@@ -126,7 +126,6 @@
   ad-do-it
 )
 
-
 ; --------  Basic editing facilities ---------
 
 ; assume new files are always modified (useful for creating empty files)
@@ -134,6 +133,9 @@
 (defun assume-new-is-modified ()
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
+
+; always revert files when they change on disk
+(global-auto-revert-mode t)
 
 ; mark always active for selecting
 (setq transient-mark-mode t)
@@ -169,6 +171,7 @@
 
 ; iedit
 (require 'iedit)
+(global-set-key (kbd "C-x i") 'iedit-mode)
 
 ; anything
 (add-to-list 'load-path (in-modes-d "anything"))
@@ -231,15 +234,20 @@
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
 (setq ace-jump-mode-case-sensitive-search nil)
 (global-set-key (kbd "C-x j") 'ace-jump-char-mode)
+;   only use lowercase letters for lookup
+(setq ace-jump-mode-move-keys
+  (nconc (loop for i from ?a to ?z collect i)))
+
 
 ; drag stuff
-(autoload 'drag-stuff-global-mode (in-modes-d "drag-stuff/drag-stuff.el") nil t)
+(add-to-list 'load-path (in-modes-d "drag-stuff"))
+(setq drag-stuff-modifier '(meta control))
+(require 'drag-stuff)
 (drag-stuff-global-mode t)
-(define-key drag-stuff-mode-map (kbd "<C-M-up>") 'drag-stuff-up)
-(define-key drag-stuff-mode-map (kbd "<C-M-down>") 'drag-stuff-down)
 
 ; org-mode
 (add-to-list 'load-path (in-modes-d "org-mode/lisp"))
+(add-to-list 'load-path (in-modes-d "org-mode/contrib/lisp"))
 (autoload 'org-mode "org.el" nil t)
 
 ; nyan-mode (no .emacs.d is whole without it)
