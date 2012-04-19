@@ -96,6 +96,7 @@
                 (mode . perl-mode)
                 (mode . python-mode)
                 (mode . sh-mode)
+                (mode . csharp-mode)
                 ;; etc
                 ))
             ("Elisp"
