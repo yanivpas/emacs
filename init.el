@@ -30,17 +30,30 @@
     (scroll-bar-mode 0))
 (setq ring-bell-function 'ignore)
 
+; YASnippet - should appear before custom-set-variables
+(add-to-list 'load-path (in-modes-d "yasnippet"))
+(require 'yasnippet)
+(yas/global-mode 1)
+(setq yas/indent-line 'fixed) ; for indented snippets
+
+(setq custom-file "~/.emacs-custom.el")
+
 ; display trailing whitespaces
 (custom-set-variables
  '(show-trailing-whitespace t)
 )
 
+;(if (file-exists-p custom-file)
+;    (load-file custom-file))
+
+; cua-selection-mode - enables typing over a region to replace it
+(cua-selection-mode t)
 ; Color theme
 (cond
  ((>= emacs-major-version 24)
   (add-to-list 'custom-theme-load-path (in-emacs-d "themes"))
   (load-theme 'vmalloc t))
- ((< emacs-major-version 24)  
+ ((< emacs-major-version 24)
   (add-to-list 'load-path (in-emacs-d "legacy/themes/"))
   (load-library "color-theme")
   (require 'color-theme)
@@ -48,11 +61,11 @@
   (color-theme-dark-laptop)))
 
 ; recentf - save history of recently visited files
-(require 'recentf)
+(autoload 'recentf-mode "recentf.el" nil t)
+(autoload 'recentf-save-list "recentf.el" nil t)
+(run-with-idle-timer (* 5 60) t 'recentf-save-list)
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 1000)
-(recentf-mode 1)
-(run-with-idle-timer (* 5 60) t 'recentf-save-list)
 
 ; zap-up-to-char
 (autoload 'zap-up-to-char "misc"
@@ -124,6 +137,14 @@
 ; properly handle SHIFT+up for selection
 (defadvice terminal-init-xterm (around map-keys-properly activate)
   (define-key input-decode-map "\e[1;2A" [S-up])
+  (define-key input-decode-map "\e[1;4A" [M-up])
+  (define-key input-decode-map "\e[1;10A" [S-M-up])
+  (define-key input-decode-map "\e[1;4B" [M-down])
+  (define-key input-decode-map "\e[1;10B" [S-M-down])
+  (define-key input-decode-map "\e[1;4D" [M-left])
+  (define-key input-decode-map "\e[1;10D" [S-M-left])
+  (define-key input-decode-map "\e[1;4C" [M-right])
+  (define-key input-decode-map "\e[1;10C" [S-M-left])
   ad-do-it
 )
 
@@ -169,7 +190,11 @@
 ; ido
 (ido-mode)
 (require 'ido-recentf-open)
-(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+(defun ido-recentf-open-lazy () (interactive)
+  (recentf-mode 1)
+  (ido-recentf-open)
+)
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open-lazy)
 
 ; iedit
 (require 'iedit)
@@ -180,6 +205,7 @@
 (autoload-and-run 'anything "anything.el" t
 		  '(progn
 		    (require 'anything-config)
+                    (add-to-list 'anything-sources 'anything-c-source-emacs-functions)
 		    (add-to-list 'anything-sources 'anything-c-source-locate)
 		    (add-to-list 'anything-sources 'anything-c-source-mac-spotlight)
 		    (add-to-list 'anything-sources 'anything-c-source-kill-ring)
@@ -200,6 +226,7 @@
 ; magit
 (add-to-list 'load-path (in-modes-d "magit"))
 (autoload 'magit-status "magit" nil t)
+(autoload 'magit-branch-manager "magit" nil t)
 
 ; uniquify
 (require 'uniquify)
@@ -226,12 +253,6 @@
 (put 'autopair-backspace 'delete-selection 'supersede)
 (put 'autopair-newline 'delete-selection t)
 
-; YASnippet
-(add-to-list 'load-path (in-modes-d "yasnippet"))
-(require 'yasnippet)
-(yas/global-mode 1)
-(setq yas/indent-line 'fixed) ; for indented snippets
-
 ; ace-jump - quickly navigate to any character
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
 (setq ace-jump-mode-case-sensitive-search nil)
@@ -250,7 +271,14 @@
 ; org-mode
 (add-to-list 'load-path (in-modes-d "org-mode/lisp"))
 (add-to-list 'load-path (in-modes-d "org-mode/contrib/lisp"))
-(autoload 'org-mode "org.el" nil t)
+(require 'org-install)
+(add-hook 'org-mode-hook
+          (lambda ()
+            (define-key org-mode-map [(meta left)]    nil)
+            (define-key org-mode-map [(meta right)]   nil)
+            (define-key org-mode-map [(meta down)]    nil)
+            (define-key org-mode-map [(meta up)]   nil))
+          'append)
 
 ; nyan-mode (no .emacs.d is whole without it)
 (autoload 'nyan-mode (in-modes-d "nyan-mode/nyan-mode.el") nil t)
@@ -259,6 +287,31 @@
 (autoload 'csharp-mode (in-modes-d "csharp-mode.el") nil t)
 
 ; ------- Utilities -----
+
+; better compilation window
+;   make the compilation window always appear at the bottom
+(defun organize-compilation-window ()
+  (when (not (get-buffer-window "*compilation*"))
+    (save-selected-window
+      (save-excursion
+        (let* ((w (split-window-vertically))
+               (h (window-height w)))
+          (select-window w)
+          (switch-to-buffer "*compilation*")
+          (shrink-window (- h 10)))))))
+;   automatically close the compilation frame if no errors occurred
+(setq compilation-finish-function
+      (lambda (buf str)
+        (if (not (string-match "grep" (buffer-name buf)))
+            (if (string-match "exited abnormally" str)
+
+                ;;there were errors
+                (message "compilation errors, press C-x ` to visit")
+              ;;no errors, make the compilation window go away in 0.5 seconds
+              (run-at-time 3 nil 'delete-windows-on buf)
+              (message "NO COMPILATION ERRORS!")))))
+(add-hook 'compilation-mode-hook 'organize-compilation-window)
+
 ; browse-kill-ring
 (autoload 'browse-kill-ring (in-utils-d "browse-kill-ring.el") nil t)
 (require 'browse-kill-ring)
@@ -293,6 +346,7 @@
 (eval-after-load "c-mode" '(define-key c-mode-map [(f6)] 'ff-find-other-file))
 (eval-after-load "cc-mode" '(define-key c-mode-map [(f6)] 'ff-find-other-file))
 (global-set-key [(f7)] 'magit-status)
+(global-set-key [(control x) (f7)] 'magit-branch-manager)
 (global-set-key [(f9)] 'compile)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
 (global-set-key (kbd "C-z") 'undo)
@@ -301,5 +355,5 @@
 
 ; Customizations beyond this configuration - separate to a different file
 (setq custom-file "~/.emacs-custom.el")
-(if (file-exists-p custom-file) 
+(if (file-exists-p custom-file)
     (load-file custom-file))
