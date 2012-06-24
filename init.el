@@ -185,9 +185,14 @@
   (setq py-install-directory python-mode-dir)
   (autoload 'python-mode "python-mode.el" nil t))
 
+; HTML
+(autoload 'nxhtml-mode (in-modes-d "nxhtml-mode/autostart.el") nil t)
+(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
+
 ; Markdown
 (autoload 'markdown-mode "markdown-mode.el" nil t)
 (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+
 
 ; ------- Modes ---------
 ; ido
