@@ -364,3 +364,6 @@
 (setq custom-file "~/.emacs-custom.el")
 (if (file-exists-p custom-file)
     (load-file custom-file))
+
+;; Goto-line short-cut key
+(global-set-key "\C-l" 'goto-line)
