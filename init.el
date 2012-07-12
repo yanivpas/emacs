@@ -45,6 +45,18 @@
 (custom-set-variables
  '(show-trailing-whitespace t)
 )
+(add-hook 'term-mode-hook
+	  (lambda ()
+	    (setq show-trailing-whitespace nil)))
+(add-hook 'eshell-mode-hook
+	  (lambda ()
+	    (setq show-trailing-whitespace nil)))
+(add-hook 'shell-mode-hook
+	  (lambda ()
+	    (setq show-trailing-whitespace nil)))
+(add-hook 'inferior-python-mode-hook
+	  (lambda ()
+	    (setq show-trailing-whitespace nil)))
 
 ;(if (file-exists-p custom-file)
 ;    (load-file custom-file))
@@ -259,6 +271,11 @@
 (put 'autopair-extra-skip-close-maybe 'delete-selection t)
 (put 'autopair-backspace 'delete-selection 'supersede)
 (put 'autopair-newline 'delete-selection t)
+
+; Disable the autopair mapping in term mode
+(add-hook 'term-mode-hook
+          '(lambda ()
+	     (setq autopair-dont-activate t)))
 
 ; ace-jump - quickly navigate to any character
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
