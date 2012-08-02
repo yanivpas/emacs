@@ -42,21 +42,9 @@
 (setq custom-file "~/.emacs-custom.el")
 
 ; display trailing whitespaces
-(custom-set-variables
- '(show-trailing-whitespace t)
-)
-(add-hook 'term-mode-hook
-	  (lambda ()
-	    (setq show-trailing-whitespace nil)))
-(add-hook 'eshell-mode-hook
-	  (lambda ()
-	    (setq show-trailing-whitespace nil)))
-(add-hook 'shell-mode-hook
-	  (lambda ()
-	    (setq show-trailing-whitespace nil)))
-(add-hook 'inferior-python-mode-hook
-	  (lambda ()
-	    (setq show-trailing-whitespace nil)))
+(add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
+; python-mode is not in prog-mode yet :-(
+(add-hook 'python-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 ;(if (file-exists-p custom-file)
 ;    (load-file custom-file))
@@ -187,6 +175,7 @@
 (setq default-tab-indent 4)
 
 ; -------- Languages --------
+(require 'linum)
 (global-linum-mode t)
 ; C
 (setq c-basic-offset 4)
@@ -216,7 +205,8 @@
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 ; undo-tree
-(autoload 'undo-tree-visualize (in-modes-d "undo-tree.el") nil t)
+(require 'undo-tree)
+(global-undo-tree-mode t)
 
 ; iedit
 (require 'iedit)
@@ -288,6 +278,15 @@
 (setq ace-jump-mode-move-keys
   (nconc (loop for i from ?a to ?z collect i)))
 
+(defun add-super-char-to-ace-jump-word-mode (c)
+  (global-set-key
+   (read-kbd-macro (concat "s-" (string c)))
+   `(lambda () (interactive) (ace-jump-char-mode ,c))))
+(loop for c from ?0 to ?9 do (add-super-char-to-ace-jump-word-mode c))
+(loop for c from ?A to ?Z do (add-super-char-to-ace-jump-word-mode c))
+(loop for c from ?a to ?z do (add-super-char-to-ace-jump-word-mode c))
+(loop for c from ?( to ?) do (add-super-char-to-ace-jump-word-mode c))
+(loop for c from ?{ to ?} do (add-super-char-to-ace-jump-word-mode c))
 
 ; drag stuff
 (add-to-list 'load-path (in-modes-d "drag-stuff"))
