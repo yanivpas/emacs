@@ -387,6 +387,8 @@
 (add-hook 'org-mode-hook
           (local-set-key (kbd "C-x t") 'visual-line-mode))
 
+(setq truncate-partial-width-windows 80)
+
 ; Customizations beyond this configuration - separate to a different file
 (setq custom-file "~/.emacs-custom.el")
 (if (file-exists-p custom-file)
