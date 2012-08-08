@@ -381,8 +381,11 @@
 (global-set-key [(f9)] 'compile)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
 (global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-x t") 'toggle-truncate-lines)
 
+; Toggle-truncate-lines
+(global-set-key (kbd "C-x t") 'toggle-truncate-lines)
+(add-hook 'org-mode-hook
+          (local-set-key (kbd "C-x t") 'visual-line-mode))
 
 ; Customizations beyond this configuration - separate to a different file
 (setq custom-file "~/.emacs-custom.el")
