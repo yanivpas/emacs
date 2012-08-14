@@ -25,8 +25,11 @@
 (setq inhibit-splash-screen t)
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 (display-time) ; useful for full-screen terminals
-(unless  (string-equal system-type "windows-nt")
+
+; Try to display battery info (only if applicable)
+(unwind-protect
   (display-battery-mode t))
+
 (menu-bar-mode -1) ; get rid of the annoying menubars/toolbars etc.
 (if (boundp 'tool-bar-mode)
     (tool-bar-mode 0))
@@ -85,6 +88,7 @@
 ;        home/end
 (global-set-key [(end)]                  'end-of-line)
 (global-set-key [(home)]                 'beginning-of-line)
+(add-hook 'prog-mode-hook (lambda () (local-set-key [(return)] 'newline-and-indent)))
 ;    window moving
 (global-set-key (kbd "<M-up>") 'windmove-up)
 (global-set-key (kbd "<M-down>") 'windmove-down)
@@ -276,17 +280,15 @@
 (setq ace-jump-mode-move-keys
   (nconc (loop for i from ?a to ?z collect i)))
 
-(defun add-super-char-to-ace-jump-word-mode (c)
+
+(defun my/set-super-char-to-ace-jump-mode (c)
   (global-set-key
-   (read-kbd-macro (concat "s-" (string c)))
-   `(lambda () (interactive) (ace-jump-char-mode ,c))))
+         (read-kbd-macro (concat "s-" (string c)))
+         `(lambda () (interactive) (ace-jump-char-mode ,c))))
+
 (unless (string-equal system-type "windows-nt")
-     (progn
-       (loop for c from ?0 to ?9 do (add-super-char-to-ace-jump-word-mode c))
-       (loop for c from ?A to ?Z do (add-super-char-to-ace-jump-word-mode c))
-       (loop for c from ?a to ?z do (add-super-char-to-ace-jump-word-mode c))
-       (loop for c from ?( to ?) do (add-super-char-to-ace-jump-word-mode c))
-       (loop for c from ?{ to ?} do (add-super-char-to-ace-jump-word-mode c))))
+  ;bind most printable characters to S-<character>
+  (loop for c from ?\" to ?~ do (my/set-super-char-to-ace-jump-mode c)))
 
 ; drag stuff
 (add-to-list 'load-path (in-modes-d "drag-stuff"))
