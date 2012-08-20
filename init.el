@@ -401,3 +401,8 @@
 
 ;; Goto-line short-cut key
 (global-set-key [(control l)] 'goto-line)
+
+;; Back & Forth keys
+(global-set-key [mouse-9] 'next-buffer)
+(global-set-key [mouse-8] 'previous-buffer)
+
