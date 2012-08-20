@@ -74,11 +74,6 @@
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 1000)
 
-; zap-up-to-char
-(autoload 'zap-up-to-char "misc"
-  'interactive)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-
 ; autosave settings
 (setq auto-save-list-file-prefix nil)
 (setq make-backup-files nil)
@@ -227,6 +222,11 @@
 		    ))
 (autoload 'anything-config "anything-config.el")
 (global-set-key [(control x) (a)] 'anything)
+
+; zap-up-to-char
+(autoload 'zap-up-to-char "misc"
+  'interactive)
+(global-set-key [(control x) (z)] 'zap-up-to-char)
 
 
 ; smex (ido for M-x commands)
@@ -383,12 +383,14 @@
 (global-set-key [(control x) (f7)] 'magit-branch-manager)
 (global-set-key [(f9)] 'compile)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
-(global-set-key (kbd "C-z") 'undo)
+(global-set-key [(control z)] 'undo)
+(global-set-key [(meta z)] 'redo)
+(global-set-key [(f11)] 'whitespace-mode)
 
 ; Toggle-truncate-lines
-(global-set-key (kbd "C-x t") 'toggle-truncate-lines)
+(global-set-key [(control x) (t)] 'toggle-truncate-lines)
 (add-hook 'org-mode-hook
-          (local-set-key (kbd "C-x t") 'visual-line-mode))
+          (local-set-key [(control x) (t)] 'visual-line-mode))
 
 (setq truncate-partial-width-windows 80)
 
@@ -398,4 +400,4 @@
     (load-file custom-file))
 
 ;; Goto-line short-cut key
-(global-set-key "\C-l" 'goto-line)
+(global-set-key [(control l)] 'goto-line)
