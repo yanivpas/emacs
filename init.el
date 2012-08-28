@@ -74,14 +74,6 @@
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 1000)
 
-; zap-up-to-char
-(autoload 'zap-up-to-char "misc"
-  "Kill up to, but not including ARGth occurrence of CHAR.
-  
-  \(fn arg char)"
-  'interactive)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-
 ; autosave settings
 (setq auto-save-list-file-prefix nil)
 (setq make-backup-files nil)
@@ -132,7 +124,7 @@
 (add-hook 'ibuffer-mode-hook
   (lambda ()
     (ibuffer-switch-to-saved-filter-groups "default")))
-(global-set-key (kbd "<C-tab>") 'ibuffer)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;    yes/no turns to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -230,6 +222,11 @@
 		    ))
 (autoload 'anything-config "anything-config.el")
 (global-set-key [(control x) (a)] 'anything)
+
+; zap-up-to-char
+(autoload 'zap-up-to-char "misc"
+  'interactive)
+(global-set-key [(control x) (z)] 'zap-up-to-char)
 
 
 ; smex (ido for M-x commands)
@@ -386,9 +383,16 @@
 (global-set-key [(control x) (f7)] 'magit-branch-manager)
 (global-set-key [(f9)] 'compile)
 (global-set-key [(f12)] 'delete-trailing-whitespace)
-(global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-x t") 'toggle-truncate-lines)
+(global-set-key [(control z)] 'undo)
+(global-set-key [(meta z)] 'redo)
+(global-set-key [(f11)] 'whitespace-mode)
 
+; Toggle-truncate-lines
+(global-set-key [(control x) (t)] 'toggle-truncate-lines)
+(add-hook 'org-mode-hook
+          (local-set-key [(control x) (t)] 'visual-line-mode))
+
+(setq truncate-partial-width-windows 80)
 
 ; Customizations beyond this configuration - separate to a different file
 (setq custom-file "~/.emacs-custom.el")
@@ -396,4 +400,9 @@
     (load-file custom-file))
 
 ;; Goto-line short-cut key
-(global-set-key "\C-l" 'goto-line)
+(global-set-key [(control l)] 'goto-line)
+
+;; Back & Forth keys
+(global-set-key [mouse-9] 'next-buffer)
+(global-set-key [mouse-8] 'previous-buffer)
+
