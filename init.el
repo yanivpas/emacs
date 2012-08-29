@@ -191,6 +191,9 @@
 (autoload 'markdown-mode "markdown-mode.el" nil t)
 (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
 
+; CSV
+(autoload 'csv-mode "csv-mode.el" nil t)
+(add-to-list 'auto-mode-alist '("\\.csv$" . csv-mode))
 
 ; ------- Modes ---------
 ; ido
