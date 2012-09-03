@@ -16,6 +16,9 @@
 (if (not in-terminal)
     (server-start))
 
+; enable all disabled commands
+(setq disabled-command-function nil)
+
 (defun autoload-and-run (symbol file interactive callback)
   (autoload symbol file nil interactive)
   (eval-after-load (symbol-name symbol) callback)
@@ -212,20 +215,14 @@
 (require 'iedit)
 (global-set-key (kbd "C-x i") 'iedit-mode)
 
-; anything
-(add-to-list 'load-path (in-modes-d "anything"))
-(autoload-and-run 'anything "anything.el" t
-		  '(progn
-		    (require 'anything-config)
-                    (add-to-list 'anything-sources 'anything-c-source-emacs-functions)
-		    (add-to-list 'anything-sources 'anything-c-source-locate)
-		    (add-to-list 'anything-sources 'anything-c-source-mac-spotlight)
-		    (add-to-list 'anything-sources 'anything-c-source-kill-ring)
-		    (add-to-list 'anything-sources 'anything-c-source-occur)
-		    ))
-(autoload 'anything-config "anything-config.el")
-(global-set-key [(control x) (a)] 'anything)
-
+; helm mode
+(setq helm-input-idle-delay 0)
+(add-to-list 'load-path (in-modes-d "helm"))
+(require 'helm-config)
+(helm-mode t)
+(global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "C-x y") 'helm-show-kill-ring)
 ; zap-up-to-char
 (autoload 'zap-up-to-char "misc"
   'interactive)
@@ -277,7 +274,6 @@
 
 ; ace-jump - quickly navigate to any character
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
-(setq ace-jump-mode-case-sensitive-search nil)
 (global-set-key (kbd "C-x j") 'ace-jump-char-mode)
 ;   only use lowercase letters for lookup
 (setq ace-jump-mode-move-keys
@@ -291,7 +287,9 @@
 
 (unless (string-equal system-type "windows-nt")
   ;bind most printable characters to S-<character>
-  (loop for c from ?\" to ?~ do (my/set-super-char-to-ace-jump-mode c)))
+  (loop for c from ?\" to ?~ do (my/set-super-char-to-ace-jump-mode c))
+  (loop for c in (list ?! ?@ ?# ?$ ?% ?^ ?& ?*) do (my/set-super-char-to-ace-jump-mode c))
+  )
 
 ; drag stuff
 (add-to-list 'load-path (in-modes-d "drag-stuff"))
