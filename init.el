@@ -186,6 +186,11 @@
   (setq py-install-directory python-mode-dir)
   (autoload 'python-mode "python-mode.el" nil t))
 
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c #") 'comment-or-uncomment-region)))
+
+
 ; HTML
 (autoload 'nxhtml-mode (in-modes-d "nxhtml-mode/autostart.el") nil t)
 (add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
