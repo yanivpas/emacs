@@ -50,8 +50,6 @@
 
 ; display trailing whitespaces
 (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
-; python-mode is not in prog-mode yet :-(
-(add-hook 'python-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 ;(if (file-exists-p custom-file)
 ;    (load-file custom-file))
@@ -181,15 +179,18 @@
 (setq c-basic-offset 4)
 
 ; Python
-(let ((python-mode-dir (in-emacs-d "modes/python-mode/")))
-  (add-to-list 'load-path python-mode-dir)
-  (setq py-install-directory python-mode-dir)
-  (autoload 'python-mode "python-mode.el" nil t))
+(require 'python)
 
 (add-hook 'python-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c #") 'comment-or-uncomment-region)))
 
+
+; lua
+(add-to-list 'load-path (in-modes-d "lua-mode"))
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 
 ; HTML
 (autoload 'nxhtml-mode (in-modes-d "nxhtml-mode/autostart.el") nil t)
@@ -316,6 +317,8 @@
 
 ; nyan-mode (no .emacs.d is whole without it)
 (autoload 'nyan-mode (in-modes-d "nyan-mode/nyan-mode.el") nil t)
+(unless in-terminal
+  (nyan-mode t))
 
 ; C Sharp mode
 (autoload 'csharp-mode (in-modes-d "csharp-mode.el") nil t)
@@ -362,8 +365,7 @@
 (add-to-list 'find-file-hook 'rainbow-mode)
 
 (autoload 'python-auto-super (in-utils-d "python-auto-super.el") nil t)
-(eval-after-load "python-mode" '(define-key python-mode-map [(control ?x) ?p ?s] 'python-auto-super))
-(eval-after-load "python-mode" '(load-file (in-modes-d "virtualenv/virtualenv.el")))
+(define-key python-mode-map [(control ?x) ?p ?s] 'python-auto-super)
 
 (setq pylookup-dir (in-utils-d "pylookup"))
 (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
