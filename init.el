@@ -413,3 +413,5 @@
 (global-set-key [mouse-9] 'next-buffer)
 (global-set-key [mouse-8] 'previous-buffer)
 
+;; Don't require double escaping the re-builder
+(setq reb-re-syntax 'string)
