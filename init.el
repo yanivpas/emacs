@@ -228,16 +228,12 @@
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "C-x y") 'helm-show-kill-ring)
+(global-set-key (kbd "M-x") 'helm-M-x)
 ; zap-up-to-char
 (autoload 'zap-up-to-char "misc"
   'interactive)
 (global-set-key [(control x) (z)] 'zap-up-to-char)
 
-
-; smex (ido for M-x commands)
-(autoload 'smex-initialize (in-modes-d "smex/smex.el"))
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
 
 ; show-paren
 (show-paren-mode)
