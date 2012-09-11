@@ -350,11 +350,8 @@
               (message "NO COMPILATION ERRORS!")))))
 (add-hook 'compilation-mode-hook 'organize-compilation-window)
 
-; browse-kill-ring
-(autoload 'browse-kill-ring (in-utils-d "browse-kill-ring.el") nil t)
 (require 'browse-kill-ring)
 (browse-kill-ring-default-keybindings)
-
 ; rainbow-mode
 (autoload 'rainbow-mode (in-utils-d "rainbow-mode.el") nil t)
 (add-to-list 'find-file-hook 'rainbow-mode)
