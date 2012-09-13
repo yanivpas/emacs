@@ -228,16 +228,12 @@
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "C-x y") 'helm-show-kill-ring)
+(global-set-key (kbd "M-x") 'helm-M-x)
+
 ; zap-up-to-char
 (autoload 'zap-up-to-char "misc"
   'interactive)
 (global-set-key [(control x) (z)] 'zap-up-to-char)
-
-
-; smex (ido for M-x commands)
-(autoload 'smex-initialize (in-modes-d "smex/smex.el"))
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
 
 ; show-paren
 (show-paren-mode)
@@ -354,11 +350,6 @@
               (message "NO COMPILATION ERRORS!")))))
 (add-hook 'compilation-mode-hook 'organize-compilation-window)
 
-; browse-kill-ring
-(autoload 'browse-kill-ring (in-utils-d "browse-kill-ring.el") nil t)
-(require 'browse-kill-ring)
-(browse-kill-ring-default-keybindings)
-
 ; rainbow-mode
 (autoload 'rainbow-mode (in-utils-d "rainbow-mode.el") nil t)
 (add-to-list 'find-file-hook 'rainbow-mode)
@@ -415,3 +406,9 @@
 
 ;; Don't require double escaping the re-builder
 (setq reb-re-syntax 'string)
+
+;; Scroll without moving the cursor
+(global-set-key "\M-n"  (lambda () (interactive) (scroll-up   4)) )
+(global-set-key "\M-p"  (lambda () (interactive) (scroll-down 4)) )
+(global-set-key "\C-\M-n"  (lambda () (interactive) (scroll-other-window   4)) )
+(global-set-key "\C-\M-p"  (lambda () (interactive) (scroll-other-window-down 4)) )
