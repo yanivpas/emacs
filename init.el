@@ -46,7 +46,7 @@
 (yas/global-mode 1)
 (setq yas/indent-line 'fixed) ; for indented snippets
 
-(setq custom-file "~/.emacs-custom.el")
+(setq custom-file (in-emacs-d "emacs-custom.el"))
 
 ; display trailing whitespaces
 (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
@@ -325,6 +325,14 @@
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C--") 'er/contract-region)
+
+;mark-multiple
+(add-to-list 'load-path (in-modes-d "mark-multiple.el"))
+
+(require 'mark-more-like-this)
+(global-set-key (kbd "C-<") 'mark-previous-like-this)
+(global-set-key (kbd "C->") 'mark-next-like-this)
+(global-set-key (kbd "C-*") 'mark-all-like-this)
 
 ; better compilation window
 ;   make the compilation window always appear at the bottom
