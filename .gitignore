@@ -4,3 +4,4 @@ tramp
 *.pyc
 semanticdb
 eshell
+.mc-lists.el

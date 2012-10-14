@@ -178,6 +178,7 @@
 (setq c-basic-offset 4)
 
 ; Python
+(add-to-list 'load-path (in-modes-d "python.el"))
 (require 'python)
 
 (add-hook 'python-mode-hook
@@ -194,6 +195,11 @@
 ; HTML
 (autoload 'nxhtml-mode (in-modes-d "nxhtml-mode/autostart.el") nil t)
 (add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
+
+(add-to-list 'load-path (in-modes-d "zencoding"))
+(require 'zencoding-mode)
+(add-hook 'sgml-mode-hook 'zencoding-mode)
+
 
 ; Markdown
 (autoload 'markdown-mode "markdown-mode.el" nil t)
@@ -338,13 +344,11 @@
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C--") 'er/contract-region)
 
-;mark-multiple
-(add-to-list 'load-path (in-modes-d "mark-multiple.el"))
 
-(require 'mark-more-like-this)
-(global-set-key (kbd "C-<") 'mark-previous-like-this)
-(global-set-key (kbd "C->") 'mark-next-like-this)
-(global-set-key (kbd "C-*") 'mark-all-like-this)
+(add-to-list 'load-path (in-modes-d "multiple-cursors.el"))
+(require 'multiple-cursors)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 
 ; better compilation window
 ;   make the compilation window always appear at the bottom
