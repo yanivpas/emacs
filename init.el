@@ -30,8 +30,10 @@
 (display-time) ; useful for full-screen terminals
 
 ; Try to display battery info (only if applicable)
-(unwind-protect
-  (display-battery-mode t))
+(condition-case ex
+    (display-battery-mode t)
+  ('error (message "Cannot display battery"))
+  )
 
 (menu-bar-mode -1) ; get rid of the annoying menubars/toolbars etc.
 (if (boundp 'tool-bar-mode)
@@ -265,22 +267,8 @@
 (global-auto-complete-mode t)
 (ac-config-default)
 
-; autopair
-(require 'autopair)
-(autopair-global-mode)
-;    compatibility with delete-selection-mode
-(put 'autopair-insert-opening 'delete-selection t)
-(put 'autopair-skip-close-maybe 'delete-selection t)
-(put 'autopair-insert-or-skip-quote 'delete-selection t)
-(put 'autopair-extra-insert-opening 'delete-selection t)
-(put 'autopair-extra-skip-close-maybe 'delete-selection t)
-(put 'autopair-backspace 'delete-selection 'supersede)
-(put 'autopair-newline 'delete-selection t)
-
-; Disable the autopair mapping in term mode
-(add-hook 'term-mode-hook
-          '(lambda ()
-	     (setq autopair-dont-activate t)))
+; electric-pair
+(add-hook 'prog-mode-hook (lambda () (electric-pair-mode t)))
 
 ; ace-jump - quickly navigate to any character
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
