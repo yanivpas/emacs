@@ -303,6 +303,8 @@
 (setq drag-stuff-modifier '(meta control))
 (require 'drag-stuff)
 (drag-stuff-global-mode t)
+(setq drag-stuff-modifier '(control super))
+
 
 ; org-mode
 (add-to-list 'load-path (in-modes-d "org-mode/lisp"))
