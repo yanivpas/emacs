@@ -58,16 +58,13 @@
 (yas/global-mode 1)
 (setq yas/indent-line 'fixed) ; for indented snippets
 
-(setq custom-file "~/.emacs-custom.el")
 
 ; display trailing whitespaces
 (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
-;(if (file-exists-p custom-file)
-;    (load-file custom-file))
-
 ; cua-selection-mode - enables typing over a region to replace it
 (cua-selection-mode t)
+
 ; Color theme
 (cond
  ((>= emacs-major-version 24)
@@ -486,3 +483,6 @@
 (require 'python-auto-import)
 (define-key python-mode-map [(control ?c) ?i] 'python-auto-import)
 
+(setq custom-file "~/.emacs-custom.el")
+(if (file-exists-p custom-file)
+    (load-file custom-file))
