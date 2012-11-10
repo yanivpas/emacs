@@ -7,9 +7,6 @@
 [submodule "modes/drag-stuff"]
 	path = modes/drag-stuff
 	url = https://github.com/rejeep/drag-stuff.git
-[submodule "modes/auto-complete"]
-	path = modes/auto-complete
-	url = http://cx4a.org/repo/auto-complete.git/
 [submodule "modes/nxhtml-mode"]
 	path = modes/nxhtml-mode
 	url = https://github.com/emacsmirror/nxhtml.git
@@ -28,10 +25,6 @@
 [submodule "modes/virtualenv"]
 	path = modes/virtualenv
 	url = https://github.com/aculich/virtualenv.el.git
-[submodule "utils/pylookup"]
-	path = utils/pylookup
-	url = https://github.com/tsgates/pylookup.git
-
 [submodule "modes/ghc-mod"]
 	path = modes/ghc-mod
 	url = https://github.com/kazu-yamamoto/ghc-mod.git
@@ -56,3 +49,27 @@
 [submodule "modes/zencoding"]
 	path = modes/zencoding
 	url = https://github.com/rooney/zencoding.git
+[submodule "modes/auto-complete"]
+	path = modes/auto-complete
+	url = https://github.com/auto-complete/auto-complete.git
+[submodule "modes/web-mode"]
+	path = modes/web-mode
+	url = https://github.com/fxbois/web-mode.git
+[submodule "modes/minimap"]
+	path = modes/minimap
+	url = git://randomsample.de/minimap.git
+[submodule "modes/autopair"]
+	path = modes/autopair
+	url = https://github.com/capitaomorte/autopair.git
+[submodule "modes/flycheck"]
+	path = modes/flycheck
+	url = https://github.com/lunaryorn/flycheck.git
+[submodule "modes/flymake"]
+	path = modes/flymake
+	url = https://github.com/illusori/emacs-flymake.git
+[submodule "modes/pylookup"]
+	path = modes/pylookup
+	url = https://github.com/tsgates/pylookup.git
+[submodule "modes/yaml-mode"]
+	path = modes/yaml-mode
+	url = https://github.com/yoshiki/yaml-mode.git

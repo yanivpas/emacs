@@ -5,16 +5,27 @@
 (setq mode-dir (in-emacs-d "modes/"))
 (defun in-modes-d (path)
   (concat mode-dir path))
-(setq utils-dir (in-emacs-d "utils/"))
-(defun in-utils-d (path)
-  (concat utils-dir path))
+(setq custom-dir (in-emacs-d "custom/"))
+(defun in-custom-d (path)
+  (concat custom-dir path))
 (add-to-list 'load-path mode-dir)
-(add-to-list 'load-path utils-dir)
+(add-to-list 'load-path custom-dir)
+
+
+(defun require-from-modes-d (path &optional symbol)
+  (add-to-list 'load-path (in-modes-d path))
+  (if symbol
+      (require symbol)
+    (load-library path))
+  )
 
 (setq in-terminal (not window-system))
 
 (if (not in-terminal)
     (server-start))
+
+; add /usr/local/bin to exec-path
+(add-to-list 'exec-path "/usr/local/bin")
 
 ; enable all disabled commands
 (setq disabled-command-function nil)
@@ -43,8 +54,7 @@
 (setq ring-bell-function 'ignore)
 
 ; YASnippet - should appear before custom-set-variables
-(add-to-list 'load-path (in-modes-d "yasnippet"))
-(require 'yasnippet)
+(require-from-modes-d "yasnippet")
 (yas/global-mode 1)
 (setq yas/indent-line 'fixed) ; for indented snippets
 
@@ -68,6 +78,10 @@
   (require 'color-theme)
   (color-theme-initialize)
   (color-theme-dark-laptop)))
+
+; rainbow-mode
+(autoload 'rainbow-mode (in-modes-d "rainbow-mode.el") nil t)
+(add-to-list 'find-file-hook 'rainbow-mode)
 
 ; recentf - save history of recently visited files
 (autoload 'recentf-mode "recentf.el" nil t)
@@ -97,6 +111,7 @@
             ("Web"
              (or
               (mode . nxhtml-mode)
+	      (mode . web-mode)
               (mode . javascript-mode)
               (mode . js-mode)
               (mode . css-mode)
@@ -180,9 +195,7 @@
 (setq c-basic-offset 4)
 
 ; Python
-(add-to-list 'load-path (in-modes-d "python.el"))
-(require 'python)
-
+(require-from-modes-d "python.el" 'python)
 (add-hook 'python-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c #") 'comment-or-uncomment-region)))
@@ -194,14 +207,25 @@
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
 (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
 
-; HTML
+; nxml/nxhtml - a bloated mode for fancy XML/HTML editing with multiple-major-mode support.
+; It is only autoloaded, not wired to any format, since it's very clumsy and requires getting
+; used to...
 (autoload 'nxhtml-mode (in-modes-d "nxhtml-mode/autostart.el") nil t)
-(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
 
-(add-to-list 'load-path (in-modes-d "zencoding"))
-(require 'zencoding-mode)
+; web
+
+; web-mode
+(require-from-modes-d "web-mode")
+(add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+
+(require-from-modes-d "zencoding" 'zencoding-mode)
+(setq zencoding-indentation web-mode-html-offset)
 (add-hook 'sgml-mode-hook 'zencoding-mode)
+(add-hook 'web-mode-hook 'zencoding-mode)
 
+; YAML
+(require-from-modes-d "yaml-mode")
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ; Markdown
 (autoload 'markdown-mode "markdown-mode.el" nil t)
@@ -220,6 +244,18 @@
 (recentf-mode 1)
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
+; minimap
+(add-to-list 'load-path (in-modes-d "minimap"))
+(autoload 'minimap "minimap")
+(defun minimap-toggle ()
+  "Toggle minimap for current buffer."
+  (interactive)
+  (require 'minimap)
+  (if (null minimap-bufname)
+      (minimap-create)
+    (minimap-kill)))
+
+
 ; undo-tree
 (require 'undo-tree)
 (global-undo-tree-mode t)
@@ -229,10 +265,9 @@
 (global-set-key (kbd "C-x i") 'iedit-mode)
 
 ; helm mode
-(setq helm-input-idle-delay 0)
-(add-to-list 'load-path (in-modes-d "helm"))
-(require 'helm-config)
+(require-from-modes-d "helm" 'helm-config)
 (helm-mode t)
+(setq helm-input-idle-delay 0)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
 (global-set-key (kbd "C-x y") 'helm-show-kill-ring)
@@ -267,8 +302,16 @@
 (global-auto-complete-mode t)
 (ac-config-default)
 
-; electric-pair
-(add-hook 'prog-mode-hook (lambda () (electric-pair-mode t)))
+; autopair
+(require-from-modes-d "autopair")
+(autopair-global-mode)
+(setq autopair-autowrap t) ; wrap selected region with quotes/parens/etc.
+(setq autpair-blink t)
+
+; Disable the autopair mapping in term mode
+(add-hook 'term-mode-hook
+          '(lambda ()
+	     (setq autopair-dont-activate t)))
 
 ; ace-jump - quickly navigate to any character
 (autoload 'ace-jump-char-mode (in-modes-d "ace-jump-mode/ace-jump-mode.el") nil t)
@@ -299,9 +342,8 @@
   )
 
 ; drag stuff
-(add-to-list 'load-path (in-modes-d "drag-stuff"))
+(require-from-modes-d "drag-stuff")
 (setq drag-stuff-modifier '(meta control))
-(require 'drag-stuff)
 (drag-stuff-global-mode t)
 (setq drag-stuff-modifier '(control super))
 
@@ -329,16 +371,17 @@
 ; ------- Utilities -----
 
 ; expand-region
-(add-to-list 'load-path (in-modes-d "expand-region"))
-(require 'expand-region)
+(require-from-modes-d "expand-region")
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C--") 'er/contract-region)
 
+(require-from-modes-d "multiple-cursors.el" 'multiple-cursors)
+(global-set-key (kbd "C->") 'mc/mark-next-symbol-like-this)
+(global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-symbol-like-this)
+(global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
 
-(add-to-list 'load-path (in-modes-d "multiple-cursors.el"))
-(require 'multiple-cursors)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c m l") 'mc/edit-ends-of-lines)
 
 ; better compilation window
 ;   make the compilation window always appear at the bottom
@@ -364,19 +407,28 @@
               (message "NO COMPILATION ERRORS!")))))
 (add-hook 'compilation-mode-hook 'organize-compilation-window)
 
-; rainbow-mode
-(autoload 'rainbow-mode (in-utils-d "rainbow-mode.el") nil t)
-(add-to-list 'find-file-hook 'rainbow-mode)
-
-(autoload 'python-auto-super (in-utils-d "python-auto-super.el") nil t)
-(define-key python-mode-map [(control ?x) ?p ?s] 'python-auto-super)
-
-(setq pylookup-dir (in-utils-d "pylookup"))
+; pylookup
+(setq pylookup-dir (in-modes-d "pylookup"))
 (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
 (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
 (add-to-list 'load-path pylookup-dir)
 (autoload 'pylookup-lookup "pylookup.el" nil t)
-(eval-after-load "python-mode" '(define-key python-mode-map [(control ?x) ?p ?l] 'pylookup-lookup))
+(define-key python-mode-map [(control ?c) ?l] 'pylookup-lookup)
+
+; dash support
+(defun dash-lookup-current-word ()
+  (interactive)
+  (browse-url (format "dash://%s" (current-word)))
+  )
+
+(global-set-key (kbd "C-c d") 'dash-lookup-current-word)
+
+; flymake
+(require-from-modes-d "flymake")
+(global-set-key [(f1)] 'flymake-display-err-menu-for-current-line)
+
+; flycheck
+(require-from-modes-d "flycheck")
 
 ; pbcopy - use OS X's clipboard if we're in the terminal
 (cond ((and in-terminal (string-equal system-type "darwin"))
@@ -406,10 +458,8 @@
 
 (setq truncate-partial-width-windows 80)
 
-; Customizations beyond this configuration - separate to a different file
-(setq custom-file "~/.emacs-custom.el")
-(if (file-exists-p custom-file)
-    (load-file custom-file))
+; open shell with C-z
+(global-set-key (kbd "C-z") 'shell)
 
 ;; Goto-line short-cut key
 (global-set-key [(control l)] 'goto-line)
@@ -426,3 +476,13 @@
 (global-set-key "\M-p"  (lambda () (interactive) (scroll-down 4)) )
 (global-set-key "\C-\M-n"  (lambda () (interactive) (scroll-other-window   4)) )
 (global-set-key "\C-\M-p"  (lambda () (interactive) (scroll-other-window-down 4)) )
+
+;; My stuff
+; python-auto-super
+(require 'python-auto-super)
+(define-key python-mode-map [(control ?c) ?s] 'python-auto-super)
+
+; python-auto-import
+(require 'python-auto-import)
+(define-key python-mode-map [(control ?c) ?i] 'python-auto-import)
+
