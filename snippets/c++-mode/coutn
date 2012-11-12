@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: coutn
+# key: coutn
+# --
+cout << "$1" << endl;
