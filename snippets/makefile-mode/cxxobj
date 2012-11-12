@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: cxxobj
+# key: cxxobj
+# --
+${1:x}.o: $1.cpp
+	$(CC) $(CXXFLAGS) -c $^ -o $@

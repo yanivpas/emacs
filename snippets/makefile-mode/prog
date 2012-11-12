@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: prog
+# key: prog
+# --
+OBJ=$1.o
+
+${1:x}: $(OBJ)
+	$(CC) $(LDFLAGS) $(OBJ) -o $@

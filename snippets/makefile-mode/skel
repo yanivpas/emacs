@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: skel
+# key: skel
+# --
+CC=cc
+CFLAGS=-Wall -Wextra -Wconversion -ansi -pedantic
+CXXFLAGS=$(CFLAGS)
+
+clean:
+	rm -f *.o ${1:x}

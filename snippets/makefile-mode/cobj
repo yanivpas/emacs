@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: cobj
+# key: cobj
+# --
+${1:x}.o: $1.c
+	$(CC) $(CFLAGS) -c $^ -o $@
