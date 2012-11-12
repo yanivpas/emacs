@@ -2,7 +2,8 @@
 # name: skel
 # key: skel
 # --
-CC=cc
+CC=gcc
+CXX=g++
 CFLAGS=-Wall -Wextra -Wconversion -ansi -pedantic
 CXXFLAGS=$(CFLAGS)
 

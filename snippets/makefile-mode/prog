@@ -5,4 +5,4 @@
 OBJ=$1.o
 
 ${1:x}: $(OBJ)
-	$(CC) $(LDFLAGS) $(OBJ) -o $@
+	$(CXX) $(LDFLAGS) $(OBJ) -o $@
