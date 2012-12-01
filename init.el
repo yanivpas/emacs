@@ -11,7 +11,6 @@
 (add-to-list 'load-path mode-dir)
 (add-to-list 'load-path custom-dir)
 
-
 (defun require-from-modes-d (path &optional symbol)
   (add-to-list 'load-path (in-modes-d path))
   (if symbol
@@ -23,9 +22,6 @@
 
 (if (not in-terminal)
     (server-start))
-
-; add /usr/local/bin to exec-path
-(add-to-list 'exec-path "/usr/local/bin")
 
 ; enable all disabled commands
 (setq disabled-command-function nil)
@@ -78,7 +74,8 @@
 
 ; rainbow-mode
 (autoload 'rainbow-mode (in-modes-d "rainbow-mode.el") nil t)
-(add-to-list 'find-file-hook 'rainbow-mode)
+(add-to-list 'find-file-hook
+	     (lambda () (unless (derived-mode-p 'web-mode) (rainbow-mode))))
 
 ; recentf - save history of recently visited files
 (autoload 'recentf-mode "recentf.el" nil t)
@@ -223,7 +220,7 @@
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
 
 (require-from-modes-d "zencoding" 'zencoding-mode)
-(setq zencoding-indentation web-mode-html-offset)
+(setq zencoding-indentation 2)
 (add-hook 'sgml-mode-hook 'zencoding-mode)
 (add-hook 'web-mode-hook 'zencoding-mode)
 
@@ -259,7 +256,6 @@
       (minimap-create)
     (minimap-kill)))
 
-
 ; undo-tree
 (require 'undo-tree)
 (global-undo-tree-mode t)
@@ -271,6 +267,7 @@
 ; helm mode
 (require-from-modes-d "helm" 'helm-config)
 (helm-mode t)
+(helm-dired-mode t)
 (setq helm-input-idle-delay 0)
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key (kbd "M-i") 'helm-semantic-or-imenu)
@@ -306,11 +303,10 @@
 (global-auto-complete-mode t)
 (ac-config-default)
 
-; autopair
-(require-from-modes-d "autopair")
-(autopair-global-mode)
-(setq autopair-autowrap t) ; wrap selected region with quotes/parens/etc.
-(setq autpair-blink t)
+; smart parens
+(require-from-modes-d "dash") ; no relations to dash lookup below!
+(require-from-modes-d "smartparens")
+(smartparens-global-mode 1)
 
 ; Disable the autopair mapping in term mode
 (add-hook 'term-mode-hook
@@ -384,7 +380,7 @@
 (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-symbol-like-this)
 (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
-
+(global-set-key (kbd "C-:") 'mc/mark-all-words-like-this-in-defun)
 (global-set-key (kbd "C-c m l") 'mc/edit-ends-of-lines)
 
 ; better compilation window
@@ -476,12 +472,16 @@
 (setq reb-re-syntax 'string)
 
 ;; Scroll without moving the cursor
-(global-set-key "\M-n"  (lambda () (interactive) (scroll-up   4)) )
-(global-set-key "\M-p"  (lambda () (interactive) (scroll-down 4)) )
-(global-set-key "\C-\M-n"  (lambda () (interactive) (scroll-other-window   4)) )
-(global-set-key "\C-\M-p"  (lambda () (interactive) (scroll-other-window-down 4)) )
+(global-set-key "\C-n"  (lambda () (interactive) (scroll-up   4)) )
+(global-set-key "\C-p"  (lambda () (interactive) (scroll-down 4)) )
+(global-set-key "\M-n"  (lambda () (interactive) (scroll-other-window   4)) )
+(global-set-key "\M-p"  (lambda () (interactive) (scroll-other-window-down 4)) )
 
 ;; My stuff
+; run redgreen in current project
+(require 'redgreen-at-project-root)
+(define-key python-mode-map [(control ?c) ?r] 'redgreen-at-project-root)
+
 ; python-auto-super
 (require 'python-auto-super)
 (define-key python-mode-map [(control ?c) ?s] 'python-auto-super)
@@ -490,8 +490,10 @@
 (require 'python-auto-import)
 (define-key python-mode-map [(control ?c) ?i] 'python-auto-import)
 
-(setq custom-file "~/.emacs-custom.el")
-(if (file-exists-p custom-file)
-    (load-file custom-file))
-
 (global-set-key (kbd "C-z") 'undo-tree-undo)
+
+; ------------------ Custom site-specific settings ------------------
+(setq site-specific-filename (expand-file-name "~/.emacs-site.el"))
+(if (file-exists-p site-specific-filename)
+    (load site-specific-filename)
+    )
