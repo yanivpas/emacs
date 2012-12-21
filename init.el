@@ -64,7 +64,8 @@
 ; Color theme
 (cond
  ((>= emacs-major-version 24)
-  (add-to-list 'custom-theme-load-path (in-emacs-d "themes")))
+  (add-to-list 'custom-theme-load-path (in-emacs-d "themes"))
+  (add-to-list 'custom-theme-load-path (in-emacs-d "themes/solarized")))
  ((< emacs-major-version 24)
   (add-to-list 'load-path (in-emacs-d "legacy/themes/"))
   (load-library "color-theme")
@@ -491,9 +492,3 @@
 (define-key python-mode-map [(control ?c) ?i] 'python-auto-import)
 
 (global-set-key (kbd "C-z") 'undo-tree-undo)
-
-; ------------------ Custom site-specific settings ------------------
-(setq site-specific-filename (expand-file-name "~/.emacs-site.el"))
-(if (file-exists-p site-specific-filename)
-    (load site-specific-filename)
-    )
