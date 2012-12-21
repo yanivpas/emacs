@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(minimap-window-location (quote right))
  '(ns-pop-up-frames nil)
+ '(sp-autoescape-string-quote-if-empty (quote (python-mode)))
  '(sp-cancel-autoskip-on-backward-movement nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -17,6 +18,7 @@
  '(hl-line ((t (:background "#333"))) t)
  '(linum ((t (:inherit (shadow default) :background "#000" :foreground "#444"))))
  '(minimap-active-region-background ((t (:background "#333"))))
+ '(mode-line ((t (:background "#ccccff" :foreground "black" :box (:line-width -1 :style released-button)))))
  '(region ((t (:background "White" :foreground "black"))))
  '(rst-level-1-face ((t (:background "grey85" :foreground "black"))) t)
  '(rst-level-2-face ((t (:background "grey78" :foreground "black"))) t)
