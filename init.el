@@ -492,3 +492,9 @@
 (define-key python-mode-map [(control ?c) ?i] 'python-auto-import)
 
 (global-set-key (kbd "C-z") 'undo-tree-undo)
+
+; ------------------ Custom site-specific settings ------------------
+(setq site-specific-filename (expand-file-name "~/.emacs-site.el"))
+(if (file-exists-p site-specific-filename)
+    (load site-specific-filename)
+    )
