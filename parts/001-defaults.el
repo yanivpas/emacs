@@ -22,7 +22,7 @@
 (setq default-tab-indent 4)
 
 ; temporarily show line numbers when going-to-line (http://whattheemacsd.com//key-bindings.el-01.html)
-(global-set-key (vector 'remap 'goto-line) 'goto-line-with-feedback)
+;(global-set-key (vector 'remap 'goto-line) 'goto-line-with-feedback)
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
   (interactive)
@@ -32,6 +32,7 @@
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
+(global-linum-mode 1)
 ; enable all disabled commands
 (setq disabled-command-function nil)
 
