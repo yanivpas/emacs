@@ -5,3 +5,6 @@ tramp
 semanticdb
 eshell
 .mc-lists.el
+elpa
+.places
+*.elc
