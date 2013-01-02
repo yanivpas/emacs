@@ -85,3 +85,6 @@
 [submodule "modes/dired-details"]
 	path = modes/dired-details
 	url = https://github.com/emacsmirror/dired-details.git
+[submodule "themes/base16"]
+	path = themes/base16
+	url = https://github.com/neil477/base16-emacs.git
