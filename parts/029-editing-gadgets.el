@@ -40,10 +40,7 @@
 
 ; drag stuff
 (require-from-modes-d "drag-stuff")
-(if (eq system-type 'gnu/linux)
-    (setq drag-stuff-modifier '(super control))
-  (setq drag-stuff-modifier '(meta control)))
-
+(setq drag-stuff-modifier '(super control))
 (drag-stuff-global-mode t)
 
 ; expand-region

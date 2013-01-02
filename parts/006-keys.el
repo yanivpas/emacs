@@ -28,5 +28,9 @@
 (global-set-key (kbd "<M-right>") 'windmove-right)
 (global-set-key (kbd "<M-left>") 'windmove-left)
 
+;; zooming
+(global-set-key (kbd "C-}") 'my/zoom-in-font)
+(global-set-key (kbd "C-{") 'my/zoom-out-font)
+
 ;; Toggle truncate lines
 (global-set-key [(control x) (t)] 'toggle-truncate-lines)
