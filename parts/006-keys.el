@@ -27,3 +27,6 @@
 (global-set-key (kbd "<M-down>") 'windmove-down)
 (global-set-key (kbd "<M-right>") 'windmove-right)
 (global-set-key (kbd "<M-left>") 'windmove-left)
+
+;; Toggle truncate lines
+(global-set-key [(control x) (t)] 'toggle-truncate-lines)
