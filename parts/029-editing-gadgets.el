@@ -67,6 +67,7 @@
 
 (global-set-key (kbd "C-:") 'my/mark-all-like-this-in-defun)
 (global-set-key (kbd "C-c m l") 'mc/edit-ends-of-lines)
+(global-set-key (kbd "C-c m b") 'mc/edit-beginnings-of-lines)
 
 ; dash support
 (defun dash-lookup-current-word ()
