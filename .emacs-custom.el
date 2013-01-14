@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(cua-rectangle-mark-key (kbd "C-x <C-return>"))
  '(minimap-window-location (quote right))
+ '(long-line-limit 100)
  '(ns-pop-up-frames nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
