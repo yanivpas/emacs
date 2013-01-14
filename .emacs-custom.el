@@ -13,6 +13,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ace-jump-face-foreground ((t (:foreground "yellow" :weight bold))))
+ '(flycheck-error-face ((t (:background "dark red"))))
+ '(flycheck-warning-face ((t (:background "RoyalBlue4"))))
  '(highlight ((t (:background "Yellow" :foreground "black"))))
  '(hl-line ((t (:background "#333"))) t)
  '(linum ((t (:inherit (shadow default) :background "#000" :foreground "#444"))) t)
