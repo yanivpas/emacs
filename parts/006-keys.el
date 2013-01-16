@@ -40,3 +40,9 @@
 
 ;; Toggle truncate lines
 (global-set-key [(control x) (t)] 'toggle-truncate-lines)
+
+;; commenting/uncommenting
+(defun my/comment-or-uncomment-current-line ()
+  (interactive)
+  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
+(global-set-key (kbd "C-x ;") 'my/comment-or-uncomment-current-line)
