@@ -29,23 +29,31 @@
 (defun python-insert-import-line-at-beginning-of-buffer (import-string)
   (save-excursion
     (beginning-of-buffer)
-    (skip-comments-and-strings)
+    (--skip-comments-and-strings)
+    (--ensure-import-block)
     (let ((beg (point)))
       (newline)
       (forward-line -1)
       (insert-string import-string)
       (forward-paragraph)
       (let ((end (point)))
-        (sort-lines nil beg (point))
+        (my/sort-lines-as-exprs nil beg (point))
         (uniquify-all-lines-region beg (point))
         )
       )
   ))
 
-(defun skip-comments-and-strings ()
-  (while (looking-at-comment-or-string)
+(defun --ensure-import-block ()
+  (if (not (or (looking-at "import ") (looking-at "from ")))
+      (progn
+        (newline-and-indent)
+        (previous-line))))
+
+
+(defun --skip-comments-and-strings ()
+  (while (--looking-at-comment-or-string)
     (forward-line)))
-(defun looking-at-comment-or-string ()
+(defun --looking-at-comment-or-string ()
   (let ((face (get-text-property (point) 'face)))
     (message (format "face is %s" face))
     (or (eq face 'font-lock-comment-face)
@@ -60,6 +68,30 @@
             (goto-char start)
             (re-search-forward "^\\(.*\\)\n\\(\\(.*\n\\)*\\)\\1\n" end t))
         (replace-match "\\1\n\\2")))))
+
+(defun --end-of-chunk ()
+  (goto-char (point-at-eol))
+  (let ((limit (point-at-bol))
+        temp
+        expr-beg)
+    (while (and (setq temp (nth 1 (syntax-ppss)))
+                (<= limit temp))
+      (goto-char temp)
+      (setq expr-beg (point)))
+    (when expr-beg
+        (goto-char expr-beg)
+      (forward-sexp))))
+
+(defun my/sort-lines-as-exprs (reverse beg end) ; credit goes to http://bit.ly/VbW9AJ
+  "sort lines, or whole expression if line ends mid-expression."
+  (interactive "P\nr")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (sort-subr reverse
+                 'forward-line
+                 '--end-of-chunk))))
 
 (global-set-key (kbd "C-c i") 'python-auto-import)
 
