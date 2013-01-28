@@ -2,7 +2,8 @@
 (cond
  ((>= emacs-major-version 24)
   (add-to-list 'custom-theme-load-path (in-emacs-d "themes"))
-  (add-to-list 'custom-theme-load-path (in-emacs-d "themes/base16")))
+  (add-to-list 'custom-theme-load-path (in-emacs-d "themes/solarized"))
+  (load-theme 'solarized-dark t))
  ((< emacs-major-version 24)
   (add-to-list 'load-path (in-emacs-d "legacy/themes/"))
   (load-library "color-theme")

@@ -3,29 +3,26 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cua-mode t nil (cua-base))
  '(cua-rectangle-mark-key (kbd "C-x <C-return>"))
- '(minimap-window-location (quote right))
+ '(custom-safe-themes (quote ("fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "545287ef14b1b686cd88a99cf6ab3629e55ef6b73d59a76253eec65f4ead4fee" "4d66773cc6d32566eaf2c9c7ce11269d9eb26e428a1a4fa10e97bae46ff615da" default)))
+ '(display-battery-mode t)
+ '(display-time-mode t)
  '(long-line-limit 100)
- '(ns-pop-up-frames nil))
+ '(minimap-window-location (quote right))
+ '(ns-pop-up-frames nil)
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#000000" :foreground "#dedede" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "apple" :family "Monaco"))))
- '(ace-jump-face-foreground ((t (:background "black" :foreground "yellow" :weight bold))) t)
- '(flycheck-error-face ((t (:background "dark red"))))
- '(flycheck-warning-face ((t (:background "RoyalBlue4"))))
- '(highlight ((t (:background "Yellow" :foreground "black"))))
+ '(default ((t (:family "Droid Sans Mono" :foundry "unknown" :slant normal :weight normal :height 113 :width normal))))
+ '(ace-jump-face-foreground ((t (:foreground "red" :weight bold))) t)
+ '(helm-selection ((t (:background "dark red" :underline t))))
  '(mc/cursor-face ((t (:background "deep sky blue" :foreground "black"))))
- '(hl-line ((t (:background "#333"))) t)
- '(linum ((t (:inherit (shadow default) :background "#000" :foreground "#444"))) t)
- '(minimap-active-region-background ((t (:background "#333"))) t)
- '(mode-line ((t (:background "#ccccff" :foreground "black" :box (:line-width -1 :style released-button)))))
- '(region ((t (:background "White" :foreground "black"))))
- '(rst-level-1-face ((t (:background "grey85" :foreground "black"))) t)
- '(rst-level-2-face ((t (:background "grey78" :foreground "black"))) t)
- '(rst-level-3-face ((t (:background "grey71" :foreground "black"))) t)
- '(rst-level-4-face ((t (:background "grey64" :foreground "black"))) t)
- '(rst-level-5-face ((t (:background "grey57" :foreground "black"))) t)
- '(rst-level-6-face ((t (:background "#ddf" :foreground "black"))) t))
+ '(minimap-active-region-background ((t (:background "#333"))) t))
+
+(font-lock-add-keywords 'python-mode
+    '(("\\_<\\(from\\|import\\|as\\|assert\\)\\_>" 0 'font-lock-special-keyword-face)))
