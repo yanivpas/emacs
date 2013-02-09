@@ -25,3 +25,5 @@
 
 (font-lock-add-keywords 'python-mode
     '(("\\_<\\(from\\|import\\|as\\|assert\\)\\_>" 0 'font-lock-special-keyword-face)))
+
+(setq-default cursor-type 'bar)
