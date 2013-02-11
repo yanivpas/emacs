@@ -3,7 +3,8 @@ ac-comphist.dat
 tramp
 *.pyc
 semanticdb
-eshell
+eshell/history
+eshell/lastdir
 elpa
 .places
 *.elc

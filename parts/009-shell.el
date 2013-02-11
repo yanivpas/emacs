@@ -8,3 +8,8 @@
           (lambda ()
             (define-key shell-mode-map
               (kbd "C-d") 'my/comint-delchar-or-eof-or-kill-buffer)))
+
+(add-hook 'eshell-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "<down>") 'next-line)
+	    (local-set-key (kbd "<up>") 'previous-line)))

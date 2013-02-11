@@ -1,0 +1,3 @@
+alias magit magit-status .
+alias d dired $1'
+alias e find-file $1

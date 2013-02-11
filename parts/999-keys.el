@@ -13,8 +13,8 @@
 (global-set-key [(f12)] 'delete-trailing-whitespace)
 
 
-;; Open shell with C-z
-(global-set-key (kbd "C-z") 'shell)
+;; Open eshell with C-z
+(global-set-key (kbd "C-z") 'eshell)
 
 
 ;; Scroll without moving the cursor
