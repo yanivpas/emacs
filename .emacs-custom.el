@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(cua-mode t nil (cua-base))
  '(cua-rectangle-mark-key (kbd "C-x <C-return>"))
+ '(ansi-color-names-vector ["black" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
  '(custom-safe-themes (quote ("fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "545287ef14b1b686cd88a99cf6ab3629e55ef6b73d59a76253eec65f4ead4fee" "4d66773cc6d32566eaf2c9c7ce11269d9eb26e428a1a4fa10e97bae46ff615da" default)))
  '(display-time-mode t)
  '(long-line-limit 100)
